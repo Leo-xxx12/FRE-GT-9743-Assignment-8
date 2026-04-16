@@ -185,6 +185,7 @@ class SABRAnalytics:
             # df/dalpha * dalpha/dtheta  + df/dtheta = 0 =>  dalpha / dtheta = - df/dtheta / df/dalpha
 
             return res
+        return res
 
     # conversion to alpha from normal atm vol
     @staticmethod
@@ -201,8 +202,8 @@ class SABRAnalytics:
         tol: float = 1e-8,
     ) -> Dict[SabrMetrics, float]:
         
-        atm_ln_sigma_res = EuropeanOptionAnalytics.normal_to_log_normal_atm(
-            forward + shift, time_to_expiry, sigma_atm_normal, calc_risk
+        atm_ln_sigma_res = EuropeanOptionAnalytics.normal_vol_to_lognormal_vol(
+            forward + shift, forward + shift, time_to_expiry, sigma_atm_normal, calc_risk
         )
         sigma_atm_lognormal = atm_ln_sigma_res[SimpleMetrics.IMPLIED_LOG_NORMAL_VOL]
 
@@ -220,10 +221,9 @@ class SABRAnalytics:
         # compute implied log normal vol
 
         # risk aggregation
-        final_res = {}
 
         if calc_risk:
-            d_ln_sig_d_norm = atm_ln_sigma_res.get(SimpleMetrics.DNORMALSIGMA, 1.0)
+            d_ln_sig_d_norm = atm_ln_sigma_res[SimpleMetrics.D_LN_VOL_D_N_VOL] 
             d_alpha_d_lnsig = alpha_res[SabrMetrics.D_ALPHA_D_LN_SIGMA_ATM]
 
             final_res[SabrMetrics.D_ALPHA_D_NORMAL_SIGMA_ATM] = d_alpha_d_lnsig * d_ln_sig_d_norm
