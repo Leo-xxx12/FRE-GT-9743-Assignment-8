@@ -804,7 +804,7 @@ class SABRAnalytics:
             c_dn  = call_pv(K - eps)
             c_mid = call_pv(K)
 
-            cdf[i] = 1.0 + (c_up - c_dn) / (2 * eps)        # 1 + dC/dK
-            pdf[i] = (c_up - 2 * c_mid + c_dn) / (eps ** 2)  # d²C/dK²
+            cdf[i] = 1.0 + (c_up - c_dn) / (2 * eps)        
+            pdf[i] = (c_up - 2 * c_mid + c_dn) / (eps ** 2)  
 
         return pdf, cdf
